@@ -1,0 +1,12 @@
+[package]
+name = "anathema-extras"
+version = "0.1.0"
+edition = "2024"
+
+[profile.release]
+debug = true
+
+[dependencies]
+anathema = { path = "../anathema" }
+# anathema = { git = "https://github.com/togglebyte/anathema/", branch="dev" }
+unicode-width = "0.1.13"

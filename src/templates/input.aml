@@ -1,0 +1,15 @@
+container [min_width: 1, height: 1]
+    zstack
+        // Text
+        padding [right: 0]
+            overflow [axis: "horz"]
+                text state.text
+
+        // Cursor
+        position [left: state.screen_cursor]
+            container [
+                background: attributes.cursor_color_bg ? "green", 
+                foreground: attributes.cursor_color_fg ? "black", 
+                width: 1, 
+                height: 1,
+            ]
