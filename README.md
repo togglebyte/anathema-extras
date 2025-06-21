@@ -64,5 +64,3 @@ vstack
     @input (on_enter->update_label_a)
     @input (on_enter->update_label_b)
 ```
-
-# Button
