@@ -2,9 +2,20 @@
 name = "anathema-extras"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+description = "Additional components for Anathema"
+keywords = ["tui", "components"]
+categories = ["command-line-interface"]
+readme = "./README.md"
+homepage = "https://github.com/togglebyte/anathema-extras"
+repository = "https://github.com/togglebyte/anathema-extras"
+publish = true
 
 [profile.release]
 debug = true
+
+[lints.rust]
+rust_2018_idioms = "deny"
 
 [dependencies]
 anathema = { version = "0.2" }
