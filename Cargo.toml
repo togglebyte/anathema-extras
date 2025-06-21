@@ -7,6 +7,5 @@ edition = "2024"
 debug = true
 
 [dependencies]
-anathema = { path = "../anathema" }
-# anathema = { git = "https://github.com/togglebyte/anathema/", branch="dev" }
+anathema = { version = "0.2" }
 unicode-width = "0.1.13"

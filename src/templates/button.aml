@@ -1,0 +1,2 @@
+border [button: true, foreground: attributes.foreground, bold: attributes.bold, italic: attributes.italic]
+    text [background: state.bg] attributes.label ? "[missing label]"

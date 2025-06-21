@@ -3,7 +3,10 @@ container [min_width: 1, height: 1]
         // Text
         padding [right: 0]
             overflow [axis: "horz"]
-                text state.text
+                if state.text
+                    text state.text
+                else
+                    $children
 
         // Cursor
         position [left: state.screen_cursor]

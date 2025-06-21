@@ -2,9 +2,7 @@ use std::ops::Deref;
 
 use anathema::component::*;
 use anathema::default_widgets::Overflow;
-use anathema::geometry::{Pos, Size};
 use anathema::prelude::*;
-use unicode_width::UnicodeWidthStr;
 
 // -----------------------------------------------------------------------------
 //   - Change -
@@ -23,11 +21,6 @@ impl InputChange {
     pub fn insert(character: char, pos: i32) -> Self {
         Self::Insert(character, pos as usize)
     }
-}
-
-enum Direction {
-    Left,
-    Right,
 }
 
 // -----------------------------------------------------------------------------
@@ -118,21 +111,6 @@ impl Input {
         }
         self.cursor += 1;
     }
-
-    fn remove_char(&mut self, state: &mut InputState) -> Option<char> {
-        let chars = state.char_count() as i32;
-
-        if self.cursor >= chars {
-            return None;
-        }
-
-        if chars == 0 {
-            return None;
-        }
-
-        let c = state.text.to_mut().remove(self.cursor as usize);
-        Some(c)
-    }
 }
 
 impl Component for Input {
@@ -165,8 +143,17 @@ impl Component for Input {
                     context.publish(Self::ON_CHANGE, change);
                 }
                 KeyCode::Enter if !state.text.to_ref().is_empty() => {
-                    let text = std::mem::take(&mut *state.text.to_mut());
-                    self.cursor = 0;
+                    let clear_on_enter = context
+                        .attributes
+                        .get_as::<bool>("clear_on_enter")
+                        .unwrap_or(true);
+                    let text = match clear_on_enter {
+                        true => {
+                            self.cursor = 0;
+                            std::mem::take(&mut *state.text.to_mut())
+                        }
+                        false => state.text.to_ref().clone(),
+                    };
 
                     context.publish(Self::ON_ENTER, Text(text));
                 }
@@ -176,7 +163,6 @@ impl Component for Input {
                 KeyCode::End => self.cursor = state.char_count() as i32,
                 KeyCode::Delete if state.char_count() > 0 => {
                     let c = state.text.to_mut().remove(self.cursor as usize);
-
                     let change = InputChange::remove(c, self.cursor);
                     context.publish(Self::ON_CHANGE, change);
                     return;
@@ -190,8 +176,8 @@ impl Component for Input {
 
     fn on_blur(
         &mut self,
-        state: &mut Self::State,
-        mut children: Children<'_, '_>,
+        _: &mut Self::State,
+        _: Children<'_, '_>,
         mut context: Context<'_, '_, Self::State>,
     ) {
         context.publish(Self::ON_BLUR, ());
@@ -199,8 +185,8 @@ impl Component for Input {
 
     fn on_focus(
         &mut self,
-        state: &mut Self::State,
-        mut children: Children<'_, '_>,
+        _: &mut Self::State,
+        _: Children<'_, '_>,
         mut context: Context<'_, '_, Self::State>,
     ) {
         context.publish(Self::ON_FOCUS, ());
